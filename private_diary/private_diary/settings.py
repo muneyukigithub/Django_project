@@ -85,11 +85,11 @@ WSGI_APPLICATION = 'private_diary.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'private_diary',
+        'NAME': 'mydb',
         'USER':os.environ.get('DB_USER'),
         'PASSWORD':os.environ.get('DB_PASSSWORD'),
-        'HOST':"",
-        'PORT':"",
+        'HOST':"localhost",
+        'PORT':"5432",
     }
 }
 
@@ -155,26 +155,11 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
         },
-        'django.server': {
-            'level': 'INFO',
-            'class': 'logging.StreamHandler',
-            'formatter': 'django.server',
-        },
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
     },
     'loggers': {
         'django': {
             'handlers': ['console'],
             'level': 'INFO',
-        },
-        'django.server': {
-            'handlers': ['django.server'],
-            'level': 'INFO',
-            'propagate': False,
         },
         #追加
         'diary': {
