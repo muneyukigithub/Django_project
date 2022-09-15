@@ -1,0 +1,27 @@
+{% load static %}
+
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="日記">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'diary/base.css' %}">
+    {% block css %}{% endblock %}
+</head>
+
+<body>
+<dev class="container">
+    <nav class="menubar">
+        <ul>
+            <li><a href="{% url 'diary:index'%}">HOME</a></li>
+            <li><a href="{% url 'diary:form'%}">お問い合わせ</a></li>
+            <li><a>about</a></li>
+        </ul>
+    </nav>
+    <header>{% block header %}{% endblock %}</header>
+       <main>{% block content %}{% endblock %}</main>
+    <footer></footer>
+</dev>
+</body>
+</html>

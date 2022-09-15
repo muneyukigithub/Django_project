@@ -1,0 +1,67 @@
+@charset "utf-8";
+
+
+
+/*リセットCSS（sanitize.css）の読み込み
+---------------------------------------------------------------------------*/
+@import url("https://unpkg.com/sanitize.css");
+
+/*Google Fonts（M PLUS Rounded 1c）の読み込み
+---------------------------------------------------------------------------*/
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300&display=swap');
+
+/*slick.cssの読み込み
+---------------------------------------------------------------------------*/
+@import url("https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css");
+
+* {
+	margin:0; padding:0; 		/*全要素のマージン・パディングをリセット*/
+}
+
+body {
+	font-family: 'M PLUS Rounded 1c', "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;	/*フォント種類*/
+	-webkit-text-size-adjust: none;
+ 	color: #9b8d69;	    /*全体の文字色*/
+	line-height: 2;		/*行間*/
+}
+
+header {
+    text-align: center;
+}
+.menubar ul {
+    list-style: none;
+	text-align: center;
+}
+
+/*リンクテキストの設定*/
+.menubar a {
+    color: #9b8d69;
+	display: block;
+    text-decoration: none;
+	padding: 0 8px;	/*上下、左右へのテキスト内にとる余白。*/
+}
+
+/*メニュー１個あたりの設定*/
+.menubar li {
+	display: inline-block;	/*メニューを横並びにする指定*/
+	text-align: center;		/*テキストをセンタリング*/
+    position: relative;
+}
+.menubar li::before {
+    content: "";
+    background: #dfd4b7;	/*下線の色*/
+    height: 3px;		/*下線の高さ*/
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    width: 100%;
+	transition: 0.2s;	/*アニメーションにかける時間*/
+    transition-timing-function: ease-out;
+	transform: scaleX(0);
+}
+
+/*マウスオン時*/
+.menubar li:hover::before {
+	transform: scaleX(1);
+}
+

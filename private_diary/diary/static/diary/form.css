@@ -1,0 +1,39 @@
+.Form{
+    margin: auto;
+    max-width: 350px;
+
+}
+
+.Form-Item{
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* align-items: center; */
+}
+
+.Form-Item-Label{
+    margin-top: 40px;
+    /* padding: 0;
+    margin: 0; */
+    /* margin-top: 10; */
+}
+
+.Form-Item-Label-Required{
+    color: red;
+    font-weight: bold;
+}
+
+.Form-Input{
+    height: 30px;
+}
+
+.Form-Button{
+    font-family: 'M PLUS Rounded 1c', "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;	/*フォント種類*/
+    width: 50px;
+    height: 30px;
+    margin-top: 30px;
+    color: #fff;
+    background-color: cornflowerblue;
+    border: 0;
+    border-radius: 5%;
+}
