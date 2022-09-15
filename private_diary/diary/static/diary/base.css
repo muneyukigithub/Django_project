@@ -65,3 +65,20 @@ header {
 	transform: scaleX(1);
 }
 
+
+.alert-success{
+    justify-content: center;
+    width:700px;
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 0 5px #999;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    color: #333;
+    gap: 0.5rem;
+    line-height: 1.5;
+    border-left: 5px solid #5CBD9D;
+}
+

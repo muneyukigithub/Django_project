@@ -20,6 +20,13 @@
         </ul>
     </nav>
     <header>{% block header %}{% endblock %}</header>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert-success">
+    {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
        <main>{% block content %}{% endblock %}</main>
     <footer></footer>
 </dev>

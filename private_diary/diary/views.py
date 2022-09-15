@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from .forms import InquiryForm
+from django.contrib import messages
 import logging
+
 logger = logging.getLogger(__name__)
 
 # Create your views here.
@@ -20,5 +22,6 @@ class InquiryView(generic.FormView):
 
     def form_valid(self, form):
         form.send_email()
-        logger.info("form_valid_check")
+        messages.success(self.request,'メッセージを送信しました。')
+        logger.info("form_valid_check_OK")
         return super().form_valid(form)
