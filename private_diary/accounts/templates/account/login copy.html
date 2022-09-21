@@ -1,6 +1,6 @@
-{% extends "base.html" %}
+{% extends "account_base.html" %}
 
-{% block title %}ログイン{% endblock %}
+{% block title %}ログイン111{% endblock %}
 
 {% block active_login %}active{% endblock %}
 
@@ -9,7 +9,7 @@
     <div class="row">
         <h1>ログイン</h1>
         <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-            {% csrf_token %}
+            {%csrf_token%}
             {{ form.as_p }}
             {% if redirect_field_value %}
             <input type="hidden" 
