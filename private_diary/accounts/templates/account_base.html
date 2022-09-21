@@ -1,0 +1,27 @@
+{% load static %}
+
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="日記">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'diary/base.css' %}">
+    {% block css %}{% endblock %}
+</head>
+
+<body>
+<dev class="container">
+     <header>{% block header %}{% endblock %}</header>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert-success">
+    {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+       <main>{% block contents %}{% endblock %}</main>
+    <footer></footer>
+</dev>
+</body>
+</html>
