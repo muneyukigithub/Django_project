@@ -6,6 +6,7 @@ from .views import (
     UserAPIView,
     TokenRefresh,
     refresh_get,
+    LogoutView,
 )
 from rest_framework import routers
 
@@ -21,8 +22,9 @@ urlpatterns = [
     path("api/", include(router.urls)),
     # JWTトークン生成
     path("api/v1/token/", views.TokenObtainView.as_view(), name="token_obtain_pair"),
-    # path("fetchTest/", fetchtest.as_view(), name="fetchTest"),
+    path("fetchTest/", fetchtest.as_view(), name="fetchTest"),
     path("user/", UserAPIView.as_view(), name="UserAPIView"),
-    path("refresh/", TokenRefresh.as_view(), name="TokenRefresh"),
-    path("refreshget/", refresh_get, name="Refreshget"),
+    path("tokenRefresh/", TokenRefresh.as_view(), name="TokenRefresh"),
+    path("getRefresh/", refresh_get, name="Refreshget"),
+    path("logout/", LogoutView.as_view(), name="LogoutView"),
 ]
