@@ -23,18 +23,45 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-9b1=1x48bdj4vu5fs7p&kbb^t3j^$jzbuzij-s+id!_)y0(9qw"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
+DEBUG = True
+# DEBUG = False
+
+CORS_ALLOW_HEADERS = (
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+    "access-control-allow-origin",
+)
 ALLOWED_HOSTS = ["*"]
+
+SESSION_COOKIE_SAMESITE = None  # default='Lax'
+SESSION_COOKIE_SECURE = True
+
+# ?
+# CORS_ALLOW_ALL_ORIGINS = True
 
 # CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = [
     # "http://localhost:8081",
     "http://localhost:8080",
+    "https://localhost:8080",
+    "http://127.0.0.1:8080",
+    "https://127.0.0.1:8080",
 ]
 
 # CORS(クロスドメインリクエスト)でCookieを送信することを許可
 CORS_ALLOW_CREDENTIALS = True
+
+
+# 信頼するホスト名を明記、これをやらないとCORS+DRFでやる場合CSRFエラーが出る
+CSRF_TRUSTED_ORIGINS = ["localhost", "127.0.0.1"]
 
 # Application definition
 
@@ -51,9 +78,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
