@@ -25,6 +25,7 @@ urlpatterns = [
     path("fetchTest/", fetchtest.as_view(), name="fetchTest"),
     path("user/", UserAPIView.as_view(), name="UserAPIView"),
     path("tokenRefresh/", TokenRefresh.as_view(), name="TokenRefresh"),
+    # path("regist",)
     path("getRefresh/", refresh_get, name="Refreshget"),
     path("logout/", LogoutView.as_view(), name="LogoutView"),
 ]
