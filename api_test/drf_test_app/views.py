@@ -1,7 +1,12 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Task, SmallTask, CustomUser
-from .serialyzer import TaskSerializer, SmallTaskSerializer, UserSerializer
+from .serialyzer import (
+    TaskSerializer,
+    SmallTaskSerializer,
+    UserSerializer,
+    RegisterUserSerializer,
+)
 from rest_framework_simplejwt import views as jwt_views
 from rest_framework_simplejwt import exceptions as jwt_exp
 from rest_framework.response import Response
@@ -38,9 +43,16 @@ class fetchtest(APIView):
 
         return Response("fetch OK", status=200)
 
-    # Token発行API
+
+# ユーザー登録API
+class UserRegisterView(APIView):
+    def post(self, request, *args, **kwargs):
+        reg_serializer = RegisterUserSerializer(data=request.data)
+
+        return Response("ok", 200)
 
 
+# Token発行API
 class TokenObtainView(jwt_views.TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         try:

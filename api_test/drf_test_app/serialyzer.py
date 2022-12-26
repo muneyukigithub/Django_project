@@ -39,3 +39,9 @@ class TaskSerializer(serializers.ModelSerializer):
         except:
             s = None
             return s
+
+
+class RegisterUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = "__all__"
