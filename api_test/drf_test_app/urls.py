@@ -7,6 +7,7 @@ from .views import (
     TokenRefresh,
     refresh_get,
     LogoutView,
+    UserRegisterView
 )
 from rest_framework import routers
 
@@ -22,7 +23,7 @@ urlpatterns = [
     path("api/", include(router.urls)),
     # JWTトークン生成
     path("api/v1/token/", views.TokenObtainView.as_view(), name="token_obtain_pair"),
-    path("fetchTest/", fetchtest.as_view(), name="fetchTest"),
+    path("Test/", UserRegisterView.as_view(), name="fetchTest"),
     path("user/", UserAPIView.as_view(), name="UserAPIView"),
     path("tokenRefresh/", TokenRefresh.as_view(), name="TokenRefresh"),
     # path("regist",)

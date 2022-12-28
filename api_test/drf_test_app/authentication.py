@@ -8,7 +8,7 @@ class CookieHandlerJWTAuthentication(JWTAuthentication):
         # Cookieヘッダーからaccess_tokenを取得
         access_token = request.COOKIES.get("access_token")
         print("------CookieHandlerJWTAuthentication------")
-        print(access_token)
+
         if not access_token:
             Response({"message": "no Token"})
         else:
