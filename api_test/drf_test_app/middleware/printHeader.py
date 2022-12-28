@@ -18,18 +18,18 @@ class printHeader:
 
         # print("■HTTP_ORIGIN：", end="")
         # print(request.META.get("HTTP_ORIGIN"))
-        print("■HTTP_COOKIE：", end="")
-        print(request.META.get("HTTP_COOKIE"))
+        # print("■HTTP_COOKIE：", end="")
+        # print(request.META.get("HTTP_COOKIE"))
 
         # print(request.accepts)
         # print("■request.data表示")
         # print(request.body)
-        print("■request.user：", end="")
-        print(request.user)
+        # print("■request.user：", end="")
+        # print(request.user)
         response = self.get_response(request)
-        print("■request.user：", end="")
-        print(request.user)
-        print(request.user.is_authenticated)
+        # print("■request.user：", end="")
+        # print(request.user)
+        # print(request.user.is_authenticated)
 
         # for key in response.cookies.keys():
         #     print(key)

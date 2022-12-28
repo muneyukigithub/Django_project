@@ -10,12 +10,17 @@ from .serialyzer import (
 from rest_framework_simplejwt import views as jwt_views
 from rest_framework_simplejwt import exceptions as jwt_exp
 from rest_framework.response import Response
+from rest_framework import status, generics
 from rest_framework.views import APIView
 import jwt
 from django.conf import settings
 from django.http.response import JsonResponse
 from rest_framework.permissions import IsAuthenticated
 from .authentication import CookieHandlerJWTAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.shortcuts import get_object_or_404
+
+# from rest_framework.generics import
 
 # Create your views here.
 
@@ -44,17 +49,83 @@ class fetchtest(APIView):
         return Response("fetch OK", status=200)
 
 
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+
 # ユーザー登録API
 class UserRegisterView(APIView):
     def post(self, request, *args, **kwargs):
-        reg_serializer = RegisterUserSerializer(data=request.data)
+        # print(request.data)
+       
+        # requestdata = {'email': 'admin@admin.com', 'password': 'password'}
+        # test = {'staff': 0}
 
-        return Response("ok", 200)
+        # instance = get_object_or_404(CustomUser,email='admin@admin.com')
+        # # instance= get_object_or_404(CustomUser,email='adminuser@admin.com')
+
+        # newuser = RegisterUserSerializer(instance=instance,data=test,partial=True)
+        # us = RegisterUserSerializer(instance)
+        # # print(newuser.is_valid())
+        # print(us.data)
+
+        # if us.is_valid():
+        #     print(us)
+            # print(newuser.is_valid())
+            # print(newuser.validated_data)
+            # newuser.save()
+
+
+
+        # u = CustomUser(**newuser.validated_data)
+        # print(newuser.is_active())
+        # print(u)
+
+        # newuser = RegisterUserSerializer(data=request.data)
+
+        try:
+            newuser = RegisterUserSerializer(data=request.data)
+            if newuser.is_valid():
+                print("is_valid()")
+                result = newuser.save()
+        except:
+            Response({"message": "error"}, 400)
+
+        res = Response({"message":"error"}, status=200)
+        try:
+            newtoken = TokenObtainPairSerializer(
+            data=request.data
+        )
+
+            if newtoken.is_valid():
+
+                res = Response(newtoken.validated_data, status=200)
+
+                res.set_cookie(
+                        "access_token",
+                        newtoken.validated_data["access"],
+                        max_age=60 * 60 * 24,
+                        httponly=True,
+                        samesite="None",
+                        secure=True,
+                    )
+                res.set_cookie(
+                        "refresh_token",
+                        newtoken.validated_data["refresh"],
+                        max_age=60 * 60 * 24 * 30,
+                        httponly=True,
+                        samesite="None",
+                        secure=True,
+                    )
+        except:
+            pass
+
+        return res
 
 
 # Token発行API
 class TokenObtainView(jwt_views.TokenObtainPairView):
     def post(self, request, *args, **kwargs):
+        print(self.get_serializer)
         try:
             serializer = self.get_serializer(data=request.data)
 

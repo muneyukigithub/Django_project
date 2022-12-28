@@ -176,8 +176,8 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": (  # ここを追加
         # "rest_framework.permissions.IsAuthenticated",
-        "drf_test_app.authentication.CookieHandlerJWTAuthentication",
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        # "drf_test_app.authentication.CookieHandlerJWTAuthentication",
+        # "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
 }
 
