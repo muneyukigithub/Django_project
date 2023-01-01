@@ -19,108 +19,138 @@ from rest_framework.permissions import IsAuthenticated
 from .authentication import CookieHandlerJWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import get_object_or_404
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 # from rest_framework.generics import
 
 # Create your views here.
 
 
-class TaskViewSet(viewsets.ModelViewSet):
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
+# class TaskViewSet(viewsets.ModelViewSet):
+#     queryset = Task.objects.all()
+#     serializer_class = TaskSerializer
+
+class SmallTaskView(APIView):
+    def get(self,request):
+        try:
+            tasks = SmallTask.objects.all()
+         
+            # シリアライズする場合、
+            serializer = SmallTaskSerializer(instance=tasks,many=True)
+
+            return Response({"data":serializer.data,"type":"success"},status=status.HTTP_200_OK)
+
+        except Exception as e:
+            print(e)
+        
+        return Response({"type":"error"},status=status.HTTP_200_OK)
+
+        
+class TaskView(APIView):
+    def get(self,request):
+        try:
+            tasks = Task.objects.all()
+            serializer = TaskSerializer(instance=tasks,many=True)
+            return Response({"data":serializer.data,"type":"success"},status=status.HTTP_200_OK)
+
+        except Exception as e:
+            print(e)
+       
+        return Response({"type":"error"},status=status.HTTP_200_OK)
+        
 
 
-class SmallTaskViewSet(viewsets.ModelViewSet):
-    queryset = SmallTask.objects.all()
-    serializer_class = SmallTaskSerializer
+# class SmallTaskViewSet(viewsets.ModelViewSet):
+#     queryset = SmallTask.objects.all()
+#     serializer_class = SmallTaskSerializer
 
 
-class fetchtest(APIView):
-    # authentication_classes = (CookieHandlerJWTAuthentication,)
-    permission_classes = (IsAuthenticated,)
+class UserDeactivate(APIView):
+    def post(self, request, *args, **kwargs):
+        try:
+            instance = CustomUser.objects.get(email=request.data["email"])
+            serializer = UserSerializer(instance=instance,data={"active":1},partial=True)
 
-    def get(self, request, format=None):
-        print(request.user)
+            if serializer.is_valid():
+                username = serializer.save()
+                print(username)
+            return Response({"data":{"username":""},"type":"success"},status=status.HTTP_200_OK)
 
-        return Response("fetch OK", status=200)
+        except Exception as e:
+            pass
 
-    def post(self, request):
-
-        return Response("fetch OK", status=200)
-
-
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
+        return Response({"data":"","type":"error"},status=status.HTTP_200_OK)
 
 # ユーザー登録API
 class UserRegisterView(APIView):
     def post(self, request, *args, **kwargs):
-        # print(request.data)
-       
-        # requestdata = {'email': 'admin@admin.com', 'password': 'password'}
-        # test = {'staff': 0}
 
-        # instance = get_object_or_404(CustomUser,email='admin@admin.com')
-        # # instance= get_object_or_404(CustomUser,email='adminuser@admin.com')
-
-        # newuser = RegisterUserSerializer(instance=instance,data=test,partial=True)
-        # us = RegisterUserSerializer(instance)
-        # # print(newuser.is_valid())
-        # print(us.data)
-
-        # if us.is_valid():
-        #     print(us)
-            # print(newuser.is_valid())
-            # print(newuser.validated_data)
-            # newuser.save()
-
-
-
-        # u = CustomUser(**newuser.validated_data)
-        # print(newuser.is_active())
-        # print(u)
-
-        # newuser = RegisterUserSerializer(data=request.data)
+        # response = Response({"type":"error"},status=status.HTTP_200_OK)
+        response = Response()
 
         try:
-            newuser = RegisterUserSerializer(data=request.data)
-            if newuser.is_valid():
-                print("is_valid()")
-                result = newuser.save()
-        except:
-            Response({"message": "error"}, 400)
+            
+            # newuser = RegisterUserSerializer(=request.data)
 
-        res = Response({"message":"error"}, status=200)
-        try:
-            newtoken = TokenObtainPairSerializer(
-            data=request.data
-        )
+            user = CustomUser.objects.get(email="admin10@admin.com")
+            print(user)
 
-            if newtoken.is_valid():
+            token = TokenObtainPairSerializer.get_token(user)
+                # if token.is_valid():
+            print(type(token))
+            print(dir(token))
+            print(token)
+            print(token.access_token)
 
-                res = Response(newtoken.validated_data, status=200)
 
-                res.set_cookie(
-                        "access_token",
-                        newtoken.validated_data["access"],
-                        max_age=60 * 60 * 24,
-                        httponly=True,
-                        samesite="None",
-                        secure=True,
-                    )
-                res.set_cookie(
-                        "refresh_token",
-                        newtoken.validated_data["refresh"],
-                        max_age=60 * 60 * 24 * 30,
-                        httponly=True,
-                        samesite="None",
-                        secure=True,
-                    )
-        except:
-            pass
 
-        return res
+            # if newuser.is_valid():
+                # saveuser = newuser.save()
+                # print(result)
+                # print(type(result))
+                # print(result.password)
+                # print(saveuser.password)
 
+                # token = TokenObtainPairSerializer(data={"email":"admin10@admin.com","password":"password"})
+                # token = TokenObtainPairSerializer.get_token(newuser)
+                # # if token.is_valid():
+                # print(token)
+                # print(token.data)
+        #     newtoken = TokenObtainPairSerializer(
+        #     data={"email":"admin10@admin.com","password":"password"}
+        # )
+
+        #    print(newtoken.is_valid())
+                # if(token.is_valid()): 
+                #     print(token.validated_data["access"])
+
+
+
+        #     if newtoken.is_valid():
+        #         response.set_cookie(
+        #                 "access_token",
+        #                 newtoken.validated_data["access"],
+        #                 max_age=60 * 60 * 24,
+        #                 httponly=True,
+        #                 samesite="None",
+        #                 secure=True,
+        #             )
+        #         response.set_cookie(
+        #                 "refresh_token",
+        #                 newtoken.validated_data["refresh"],
+        #                 max_age=60 * 60 * 24 * 30,
+        #                 httponly=True,
+        #                 samesite="None",
+        #                 secure=True,
+        #             )
+        except Exception as e:
+            print(e)
+            
+            # return response({"type":"error"},status=status.HTTP_400_BAD_REQUEST)
+
+        response.data = {"type":"success"}
+        response.status_code = 200
+        return response
 
 # Token発行API
 class TokenObtainView(jwt_views.TokenObtainPairView):

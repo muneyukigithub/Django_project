@@ -19,6 +19,10 @@ class SmallTaskSerializer(serializers.ModelSerializer):
         model = SmallTask
         fields = ("smalltask_id", "smalltask", "task_id")
 
+    def create(self, validated_data):
+        print("create call is SmallTask(**validate")
+        return SmallTask(**validated_data)
+
 
 class TaskSerializer(serializers.ModelSerializer):
     # SerializerMethodField は get_xxxx ってなっているメソッドをコールする

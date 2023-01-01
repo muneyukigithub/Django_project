@@ -41,6 +41,7 @@ class CustomUser(AbstractBaseUser):
         verbose_name='Eメールアドレス',
         max_length=255,
         unique=True,
+        null=True,
     )
     active = models.BooleanField(default=True)
     staff = models.BooleanField(default=False) 
