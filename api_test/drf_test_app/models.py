@@ -47,7 +47,8 @@ class CustomUser(AbstractBaseUser):
     staff = models.BooleanField(default=False) 
     admin = models.BooleanField(default=False) 
    
-    USERNAME_FIELD = 'email'
+
+    USERNAME_FIELD = 'id'
 
     objects = UserManager()
 
@@ -80,7 +81,8 @@ class Task(models.Model):
     task = models.CharField(verbose_name="タスク",max_length=255)
     # created_user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateField(verbose_name="作成日",auto_now_add=True)
-    created_user = models.OneToOneField(CustomUser, on_delete=models.CASCADE,blank=False,null=False)
+    created_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    # models.OneToOneField(CustomUser, unique=False,on_delete=models.CASCADE,blank=False,null=False)
 
     def __str__(self):
         return self.task
@@ -92,3 +94,12 @@ class SmallTask(models.Model):
 
     def __str__(self):
         return self.smalltask
+
+class Motivation(models.Model):
+    motivation = models.CharField(verbose_name="モチベーション",max_length=255,blank=False,null=False)
+    task_id = models.OneToOneField(Task, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.motivation
