@@ -6,6 +6,7 @@ from .serialyzer import (
     SmallTaskSerializer,
     UserSerializer,
     RegisterUserSerializer,
+    DetailTaskSerializer
 )
 from rest_framework_simplejwt import views as jwt_views
 from rest_framework_simplejwt import exceptions as jwt_exp
@@ -49,14 +50,45 @@ class SmallTaskView(APIView):
 class TaskView(APIView):
     def get(self,request):
         try:
-            tasks = Task.objects.all()
-            serializer = TaskSerializer(instance=tasks,many=True)
-            return Response({"data":serializer.data,"type":"success"},status=status.HTTP_200_OK)
+            # tasks = Task.objects.all()
+            # serializer = TaskSerializer(instance=tasks,many=True)
+            tasks = Task.objects.filter(created_at="2023-01-10")
+            # serializer = TaskSerializer(instance=tasks,many=True)
+            serializer = DetailTaskSerializer(instance=tasks,many=True)  
+            return Response(serializer.data,status=status.HTTP_200_OK)
+
+            # return Response({"data":serializer.data,"type":"success"},status=status.HTTP_200_OK)
 
         except Exception as e:
             print(e)
        
         return Response({"type":"error"},status=status.HTTP_200_OK)
+
+    def post(self,request):
+
+             
+      
+        # user = CustomUser(email=request.data["created_user"])
+        # user = CustomUser.objects.get(data = newtask)
+
+        savetask = ""
+        for task in request.data:
+            newtask = {"task":task["task"],"created_user":CustomUser.objects.get(email=task["created_user"]).id}
+            serializer = TaskSerializer(data=newtask)
+            if serializer.is_valid():
+                savetask = serializer.save()
+            # user_objects = []
+            # print(request.data["smalltask"])
+            for data in request.data:
+                for _smalltask in data["smalltask"]:
+                    print(_smalltask["smalltask"])
+                    smalltask = {"smalltask":_smalltask["smalltask"],"task_id":savetask.task_id}
+                    serializer = SmallTaskSerializer(data=smalltask)
+                    if serializer.is_valid():
+                        serializer.save()
+
+        return Response({"type":"os"},status=status.HTTP_200_OK)
+        
         
 
 
@@ -64,7 +96,7 @@ class TaskView(APIView):
 #     queryset = SmallTask.objects.all()
 #     serializer_class = SmallTaskSerializer
 
-
+# ユーザー退会API
 class UserDeactivate(APIView):
     def post(self, request, *args, **kwargs):
         try:
@@ -90,74 +122,51 @@ class UserRegisterView(APIView):
 
         try:
             
-            # newuser = RegisterUserSerializer(=request.data)
+            newuser = RegisterUserSerializer(data=request.data)
+            if newuser.is_valid():
+                user = newuser.save()
+                token = TokenObtainPairSerializer.get_token(user)
+                response.set_cookie(
+                        "access_token",
+                        # newtoken.validated_data["access"],
+                        str(token.access_token),
+                        max_age=60 * 60 * 24,
+                        httponly=True,
+                        samesite="None",
+                        secure=True,
+                    )
+                response.set_cookie(
+                        "refresh_token",
+                        # newtoken.validated_data["refresh"],
+                        str(token),
+                        max_age=60 * 60 * 24 * 30,
+                        httponly=True,
+                        samesite="None",
+                        secure=True,
+                    )
 
-            user = CustomUser.objects.get(email="admin10@admin.com")
-            print(user)
+                response.data = {"type":"success","access_token":str(token.access_token),"refresh":str(token)}
+                response.status_code = 200
+                return response
 
-            token = TokenObtainPairSerializer.get_token(user)
-                # if token.is_valid():
-            print(type(token))
-            print(dir(token))
-            print(token)
-            print(token.access_token)
-
-
-
-            # if newuser.is_valid():
-                # saveuser = newuser.save()
-                # print(result)
-                # print(type(result))
-                # print(result.password)
-                # print(saveuser.password)
-
-                # token = TokenObtainPairSerializer(data={"email":"admin10@admin.com","password":"password"})
-                # token = TokenObtainPairSerializer.get_token(newuser)
-                # # if token.is_valid():
-                # print(token)
-                # print(token.data)
-        #     newtoken = TokenObtainPairSerializer(
-        #     data={"email":"admin10@admin.com","password":"password"}
-        # )
-
-        #    print(newtoken.is_valid())
-                # if(token.is_valid()): 
-                #     print(token.validated_data["access"])
-
-
-
-        #     if newtoken.is_valid():
-        #         response.set_cookie(
-        #                 "access_token",
-        #                 newtoken.validated_data["access"],
-        #                 max_age=60 * 60 * 24,
-        #                 httponly=True,
-        #                 samesite="None",
-        #                 secure=True,
-        #             )
-        #         response.set_cookie(
-        #                 "refresh_token",
-        #                 newtoken.validated_data["refresh"],
-        #                 max_age=60 * 60 * 24 * 30,
-        #                 httponly=True,
-        #                 samesite="None",
-        #                 secure=True,
-        #             )
         except Exception as e:
             print(e)
-            
-            # return response({"type":"error"},status=status.HTTP_400_BAD_REQUEST)
 
-        response.data = {"type":"success"}
-        response.status_code = 200
-        return response
+
+        return Response({"type":"error"},status=status.HTTP_400_BAD_REQUEST)
+
 
 # Token発行API
 class TokenObtainView(jwt_views.TokenObtainPairView):
+
+    # def options(self, request):
+    #     print("request")
+    #     return Response()
     def post(self, request, *args, **kwargs):
-        print(self.get_serializer)
         try:
+            print(request.data)
             serializer = self.get_serializer(data=request.data)
+            print(serializer)
 
         except:
             print("get_serializer error")
@@ -169,7 +178,11 @@ class TokenObtainView(jwt_views.TokenObtainPairView):
             print("jwt_exp.TokenError")
             raise jwt_exp.InvalidToken(e.args[0])
 
+
+
+
         res = Response(serializer.validated_data, status=200)
+
 
         # try:
         #     res.delete_cookie("access_token")

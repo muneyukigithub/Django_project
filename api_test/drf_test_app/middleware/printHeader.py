@@ -26,7 +26,10 @@ class printHeader:
         # print(request.body)
         # print("■request.user：", end="")
         # print(request.user)
+        # print(request.data)
         response = self.get_response(request)
+        # print("request")
+
         # print("■request.user：", end="")
         # print(request.user)
         # print(request.user.is_authenticated)
